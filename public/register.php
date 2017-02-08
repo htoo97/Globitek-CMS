@@ -27,6 +27,9 @@
     elseif (!has_length($firstName, ['min' => 2, 'max' => 255])) {
         $errors[] = "First name must be between 2 and 255 characters.";
     }
+    elseif (preg_match('/\A[A-Za-z\s\-,\.\']+\Z/', $firstName) == 0) {
+        $errors[] = "First name has invalid characters.";
+    }
 
     // lastName
     if (is_blank($lastName)) {
@@ -34,6 +37,9 @@
     }
     elseif (!has_length($lastName, ['min' => 2, 'max' => 255])) {
         $errors[] = "Last name must be between 2 and 255 characters.";
+    }
+    elseif (preg_match('/\A[A-Za-z\s\-,\.\']+\Z/', $lastName) == 0) {
+        $errors[] = "Last name has invalid characters.";
     }
 
     // email
@@ -46,6 +52,9 @@
     elseif (!has_valid_email_format($email)) {
         $errors[] = "Invalid email!";
     }
+    elseif (preg_match('/\A[A-Za-z0-9_@\.]+\Z/', $email) == 0) {
+        $errors[] = "Email has invalid characters.";
+    }
 
     //userName
     if (is_blank($userName)) {
@@ -53,6 +62,9 @@
     }
     elseif (!has_length($userName, ['min' => 8, 'max' => 255])) {
         $errors[] = "Username must be at least 8 characters.";
+    }
+    elseif (preg_match('/\A[A-Za-z0-9_]+\Z/', $userName) == 0) {
+        $errors[] = "Username has invalid characters.";
     }
 
     // if there were no errors, submit data to database
@@ -65,24 +77,31 @@
         $userName = db_escape($connection, $userName);
         $date = db_escape($connection,date("Y-m-d H:i:s"));
 
-        $sql = "INSERT INTO user (first_name, last_name, email, username, created_at)
+        $userList = db_query($connection, "SELECT `username` from `user` WHERE `username` like '$userName'");
+        if (db_num_rows($userList) > 0) {
+            $errors[] = "Username already exists. Choose another.";
+            db_free_result($userList);
+        }
+        else {
+            $sql = "INSERT INTO user (first_name, last_name, email, username, created_at)
               VALUES ('$firstName', '$lastName', '$email', '$userName', '$date')";
 
-        // For INSERT statments, $result is just true/false
-        $result = db_query($db, $sql);
-        if($result) {
-            db_close($db);
+            // For INSERT statments, $result is just true/false
+            $result = db_query($db, $sql);
+            if($result) {
+                db_close($db);
 
-        //   redirect user to success page
-        redirect_to("./registration_success.php");
-      }
-      else {
-      // The SQL INSERT statement failed.
-      // Just show the error, not the form
-        echo db_error($db);
-        db_close($db);
-        exit;
-      }
+            //   redirect user to success page
+            redirect_to("./registration_success.php");
+            }
+            else {
+                // The SQL INSERT statement failed.
+                // Just show the error, not the form
+                echo db_error($db);
+                db_close($db);
+                exit;
+            }
+        }
     }
   }
 
