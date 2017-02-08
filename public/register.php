@@ -28,7 +28,7 @@
         $errors[] = "First name must be between 2 and 255 characters.";
     }
     elseif (preg_match('/\A[A-Za-z\s\-,\.\']+\Z/', $firstName) == 0) {
-        $errors[] = "First name has invalid characters.";
+        $errors[] = "First name has invalid characters. Only letters, spaces, and symbols (-,.') are allowed.";
     }
 
     // lastName
@@ -39,7 +39,7 @@
         $errors[] = "Last name must be between 2 and 255 characters.";
     }
     elseif (preg_match('/\A[A-Za-z\s\-,\.\']+\Z/', $lastName) == 0) {
-        $errors[] = "Last name has invalid characters.";
+        $errors[] = "Last name has invalid characters. Only letters, spaces, and symbols (-,.') are allowed.";
     }
 
     // email
@@ -53,7 +53,7 @@
         $errors[] = "Invalid email!";
     }
     elseif (preg_match('/\A[A-Za-z0-9_@\.]+\Z/', $email) == 0) {
-        $errors[] = "Email has invalid characters.";
+        $errors[] = "Email has invalid characters. Only letters, numbers, and symbols (_@.) are allowed.";
     }
 
     //userName
@@ -64,7 +64,7 @@
         $errors[] = "Username must be at least 8 characters.";
     }
     elseif (preg_match('/\A[A-Za-z0-9_]+\Z/', $userName) == 0) {
-        $errors[] = "Username has invalid characters.";
+        $errors[] = "Username has invalid characters. Only letters, numbers, and symbols (_) are allowed.";
     }
 
     // if there were no errors, submit data to database
