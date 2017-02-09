@@ -77,7 +77,7 @@
         $userName = db_escape($connection, $userName);
         $date = db_escape($connection,date("Y-m-d H:i:s"));
 
-        $userList = db_query($connection, "SELECT `username` from `user` WHERE `username` like '$userName'");
+        $userList = db_query($connection, "SELECT `username` from `users` WHERE `username` like '$userName'");
         if (db_num_rows($userList) > 0) {
             $errors[] = "Username already exists. Choose another.";
             db_free_result($userList);
