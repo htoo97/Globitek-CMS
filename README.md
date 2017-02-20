@@ -1,6 +1,4 @@
-# Globitek-CMS
-
-# Project 1 - Globitek CMS
+# Project 1 - Globitek CMS Registration
 
 Time spent: **6** hours spent in total
 
